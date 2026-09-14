@@ -23,7 +23,7 @@ public class SortedArrayList<E extends Comparable<? super E>> implements SortedL
     
     @SuppressWarnings("unchecked")
     private E[] generateNewArray(int length) {
-	return (E[]) new Object[length];
+	return (E[]) new Comparable[length];
     }
     
     @Override
@@ -85,58 +85,74 @@ public class SortedArrayList<E extends Comparable<? super E>> implements SortedL
 
     @Override
     public void insert(E element) {
-	if(size == data.length){
+	if(size == data.length) {
 	    E[] tempArray = generateNewArray(data.length*2);
 	    for(int i = 0; i < size - 1; i++) {
 		tempArray[i] = data[i];
 	    }
 	    data = tempArray;
 	}
-	
+
+	for (int i = size; i >= 0; i--) {
+	    if(data[i-1].compareTo(element) < 0) {
+		data[i] = element;
+		break;
+	    } else {
+		data[i] = data[i-1];
+	    }
+	}
 	size += 1;
-	
     }
 
     @Override
     public void insertAll(Collection<? extends E> coll) {
-	// TODO Auto-generated method stub
-
+	for(E item : coll) {
+	    insert(item);
+	}
     }
 
     @Override
     public boolean isEmpty() {
-	// TODO Auto-generated method stub
-	return false;
+	return size == 0;
     }
 
     @Override
     public E max() throws NoSuchElementException {
-	// TODO Auto-generated method stub
-	return null;
+	if(isEmpty()) {
+	    throw new NoSuchElementException();
+	}
+	return data[size-1];
     }
 
     @Override
     public E median() throws NoSuchElementException {
-	// TODO Auto-generated method stub
-	return null;
+	if(isEmpty()) {
+	    throw new NoSuchElementException();
+	}
+	int middleIndex = size/2;
+	return (size % 2 == 0) ? data[middleIndex + 1] : data[middleIndex];
     }
 
     @Override
     public E min() throws NoSuchElementException {
-	// TODO Auto-generated method stub
-	return null;
+	if(isEmpty()) {
+	    throw new NoSuchElementException();
+	}
+	return data[0];
     }
 
     @Override
     public int size() {
-	// TODO Auto-generated method stub
-	return 0;
+	return size;
     }
 
     @Override
     public Object[] toArray() {
-	// TODO Auto-generated method stub
-	return null;
+	Object[] array = new Object[size];
+	for (int i = 0; i < array.length; i++) {
+	    array[i] = data[i];
+	}
+	return array;
     }
 
 }
