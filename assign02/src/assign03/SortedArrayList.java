@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
-public class SortedArrayList<E extends Comparable<? super E>> implements SortedList<E> {
+public class SortedArrayList<E> implements SortedList<E> {
     
     private E[] data;
     private int size;
@@ -23,7 +23,7 @@ public class SortedArrayList<E extends Comparable<? super E>> implements SortedL
     
     @SuppressWarnings("unchecked")
     private E[] generateNewArray(int length) {
-	return (E[]) new Comparable[length];
+	return (E[]) new Object[length];
     }
     
     @Override
@@ -41,9 +41,9 @@ public class SortedArrayList<E extends Comparable<? super E>> implements SortedL
 	int low = 0, high = size - 1, mid = 0;
 	while(low <= high) {
 		mid = (low + high) / 2;
-		if(element.compareTo(data[mid]) == 0) {
+		if(((Comparable<? super E>)element).compareTo(data[mid]) == 0) {
 		    return mid;
-		} else if(element.compareTo(data[mid]) < 0) {
+		} else if(((Comparable<? super E>)element).compareTo(data[mid]) < 0) {
 		    high = mid - 1;
 		} else {
 		    low = mid + 1;
@@ -56,9 +56,9 @@ public class SortedArrayList<E extends Comparable<? super E>> implements SortedL
 	int low = 0, high = size - 1, mid = 0, count = 0;
 	while(low <= high) {
 		mid = (low + high) / 2;
-		if(element.compareTo(data[mid]) == 0) {
+		if(((Comparable<? super E>)element).compareTo(data[mid]) == 0) {
 		    count += 1;
-		} else if(element.compareTo(data[mid]) < 0) {
+		} else if(((Comparable<? super E>)element).compareTo(data[mid]) < 0) {
 		    high = mid - 1;
 		} else {
 		    low = mid + 1;
@@ -85,23 +85,29 @@ public class SortedArrayList<E extends Comparable<? super E>> implements SortedL
 
     @Override
     public void insert(E element) {
-	if(size == data.length) {
+
+	if(isEmpty()) {
+	    size++;
+	    data[0] = element;
+	    return;
+	}
+	if(size >= data.length) {
 	    E[] tempArray = generateNewArray(data.length*2);
-	    for(int i = 0; i < size - 1; i++) {
+	    for(int i = 0; i < size; i++) {
 		tempArray[i] = data[i];
 	    }
 	    data = tempArray;
 	}
 
 	for (int i = size; i >= 0; i--) {
-	    if(data[i-1].compareTo(element) < 0) {
+	    if(i == 0 || ((Comparable<? super E>)data[i-1]).compareTo(element) < 0) {
 		data[i] = element;
 		break;
 	    } else {
 		data[i] = data[i-1];
 	    }
 	}
-	size += 1;
+	size++;
     }
 
     @Override
