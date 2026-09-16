@@ -28,7 +28,8 @@ public class SortedArrayList<E> implements SortedList<E> {
 
     @Override
     public boolean contains(E element) {
-	return binarySearchCount(element) > 0;
+	E elementFromSearch = data[binarySearch(element)];
+	return elementFromSearch != null && elementFromSearch.equals(element);
     }
 
     @Override
@@ -43,10 +44,26 @@ public class SortedArrayList<E> implements SortedList<E> {
 
     @Override
     public int countEntries(E target) {
-	return binarySearchCount(target);
+	int count = 0;
+	int targetIndex = binarySearch(target);
+	if(!data[targetIndex].equals(target)) {
+	    return count;
+	}
+	
+	count++;
+	int lowerIndex = Math.max(0, targetIndex - 1);
+	int higherIndex = targetIndex + 1;
+	while((lowerIndex != 0 && data[lowerIndex].equals(target))) {
+	    count++;
+	    lowerIndex--;
+	}
+	while(higherIndex != size && data[higherIndex].equals(target)) {
+	    count++;
+	    higherIndex++;
+	}
+	return count;
     }
 
-    // Change to use binary search
     @Override
     public void insert(E element) {
 	if (size >= data.length) {
@@ -140,23 +157,7 @@ public class SortedArrayList<E> implements SortedList<E> {
 		low = mid + 1;
 	    }
 	}
-	// mid + 1 is the index where element should be inserted
 	return low;
-    }
-
-    private int binarySearchCount(E element) {
-	int low = 0, high = size - 1, mid = 0, count = 0;
-	while (low <= high) {
-	    mid = (low + high) / 2;
-	    if (innerCompare(element, data[mid]) == 0) {
-		count += 1;
-	    } else if (innerCompare(element, data[mid]) < 0) {
-		high = mid - 1;
-	    } else {
-		low = mid + 1;
-	    }
-	}
-	return count;
     }
     
     private void shiftInsert(E element, int insertionPoint) {
