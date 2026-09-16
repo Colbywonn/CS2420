@@ -21,11 +21,6 @@ public class SortedArrayList<E> implements SortedList<E> {
 	this.cmp = cmp;
     }
     
-    @SuppressWarnings("unchecked")
-    private E[] generateNewArray(int length) {
-	return (E[]) new Object[length];
-    }
-    
     @Override
     public void clear() {
 	data = generateNewArray(data.length);
@@ -37,35 +32,7 @@ public class SortedArrayList<E> implements SortedList<E> {
 	return binarySearch(element) > 0;
     }
 
-    private int binarySearch(E element) {
-	int low = 0, high = size - 1, mid = 0;
-	while(low <= high) {
-		mid = (low + high) / 2;
-		if(((Comparable<? super E>)element).compareTo(data[mid]) == 0) {
-		    return mid;
-		} else if(((Comparable<? super E>)element).compareTo(data[mid]) < 0) {
-		    high = mid - 1;
-		} else {
-		    low = mid + 1;
-		}
-	}
-	return -1;
-    }
     
-    private int binarySearches(E element) {
-	int low = 0, high = size - 1, mid = 0, count = 0;
-	while(low <= high) {
-		mid = (low + high) / 2;
-		if(((Comparable<? super E>)element).compareTo(data[mid]) == 0) {
-		    count += 1;
-		} else if(((Comparable<? super E>)element).compareTo(data[mid]) < 0) {
-		    high = mid - 1;
-		} else {
-		    low = mid + 1;
-		}
-	}
-	return count;
-    }
 
 
     @Override
@@ -80,9 +47,10 @@ public class SortedArrayList<E> implements SortedList<E> {
 
     @Override
     public int countEntries(E target) {
-	return binarySearches(target);
+	return binarySearchCount(target);
     }
-
+    
+    // Change to use binary search
     @Override
     public void insert(E element) {
 
@@ -92,21 +60,19 @@ public class SortedArrayList<E> implements SortedList<E> {
 	    return;
 	}
 	if(size >= data.length) {
-	    E[] tempArray = generateNewArray(data.length*2);
-	    for(int i = 0; i < size; i++) {
-		tempArray[i] = data[i];
-	    }
-	    data = tempArray;
+	    doubleBackingArray();
 	}
+	
+	int lowerBound = binarySearch(element);
+	shiftInsert(element, lowerBound);
+    }
 
-	for (int i = size; i >= 0; i--) {
-	    if(i == 0 || ((Comparable<? super E>)data[i-1]).compareTo(element) < 0) {
-		data[i] = element;
-		break;
-	    } else {
-		data[i] = data[i-1];
-	    }
+
+    private void shiftInsert(E element, int insertionPoint) {
+	for (int i = size; i >= insertionPoint; i--) {
+	    data[i] = data[i-1];
 	}
+    	data[insertionPoint + 1] = element;
 	size++;
     }
 
@@ -160,5 +126,58 @@ public class SortedArrayList<E> implements SortedList<E> {
 	}
 	return array;
     }
-
+    
+    @SuppressWarnings("unchecked")
+    private E[] generateNewArray(int length) {
+	return (E[]) new Object[length];
+    }
+    
+    private void doubleBackingArray() {
+	E[] tempArray = generateNewArray(data.length * 2);
+	for(int i = 0; i < size; i++) {
+	tempArray[i] = data[i];
+	}
+	data = tempArray;
+    }
+    
+    @SuppressWarnings("unchecked")
+    private int innerCompare(E elt1, E elt2) {
+	if(cmp == null) {
+	    return ((Comparable<? super E>) elt1).compareTo(elt2);
+	}
+	return cmp.compare(elt1, elt2);
+    }
+    
+    
+    private int binarySearch(E element) {
+	int low = 0, high = size - 1, mid = 0;
+	while(low <= high) {
+		mid = (low + high) / 2;
+		if(innerCompare(element, data[mid]) == 0) {
+		    return mid;
+		} else if(innerCompare(element, data[mid]) < 0) {
+		    high = mid - 1;
+		} else {
+		    low = mid + 1;
+		}
+	}
+	// mid + 1 is the index where element should be inserted
+      return mid + 1;
+    }
+    
+    private int binarySearchCount(E element) {
+	int low = 0, high = size - 1, mid = 0, count = 0;
+	while(low <= high) {
+		mid = (low + high) / 2;
+		if(innerCompare(element, data[mid]) == 0) {
+		    count += 1;
+		} else if(innerCompare(element, data[mid]) < 0) {
+		    high = mid - 1;
+		} else {
+		    low = mid + 1;
+		}
+	}
+	// mid + 1 is the index where element should be inserted
+	return count;
+    }
 }
