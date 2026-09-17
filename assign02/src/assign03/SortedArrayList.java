@@ -46,7 +46,7 @@ public class SortedArrayList<E> implements SortedList<E> {
     public int countEntries(E target) {
 	int count = 0;
 	int targetIndex = binarySearch(target);
-	if(!data[targetIndex].equals(target)) {
+	if(data[targetIndex] == null || !data[targetIndex].equals(target)) {
 	    return count;
 	}
 	
@@ -97,8 +97,7 @@ public class SortedArrayList<E> implements SortedList<E> {
 	if (isEmpty()) {
 	    throw new NoSuchElementException();
 	}
-	int middleIndex = size / 2;
-	return (size % 2 == 0) ? data[middleIndex + 1] : data[middleIndex];
+	return data[size/2];
     }
 
     @Override
