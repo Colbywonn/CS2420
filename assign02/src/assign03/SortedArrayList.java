@@ -3,18 +3,30 @@ package assign03;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
-
+/**
+ * Represents a list in sorted order, from
+ * smallest to largest. Contains methods for getting the smallest, largest, and median values.
+ * NOTE: Element type <E> must either implement Comparable or inherit from a class that implements Comparable.
+ *
+ * @author CS 2420 course staff, Colby Miller, and Todd Sorensen
+ * @version September 17, 2026
+ */
 public class SortedArrayList<E> implements SortedList<E> {
 
     private E[] data;
     private int size;
     private Comparator<? super E> cmp;
-
+    /**
+     * Constructs a new SortedArrayList whose element order will be determined by the natural ordering of the element type <E>.
+     */
     public SortedArrayList() {
 	data = generateNewArray(16);
 	size = 0;
     }
-
+    
+    /**
+     * Constructs a new SortedArrayList whose element order will be determined by the given Comparator object.
+     */
     public SortedArrayList(Comparator<? super E> cmp) {
 	this();
 	this.cmp = cmp;
@@ -46,18 +58,17 @@ public class SortedArrayList<E> implements SortedList<E> {
     public int countEntries(E target) {
 	int count = 0;
 	int targetIndex = binarySearch(target);
-	if(data[targetIndex] == null || !data[targetIndex].equals(target)) {
+	if(targetIndex >= size || !data[targetIndex].equals(target)) {
 	    return count;
 	}
-	
 	count++;
-	int lowerIndex = Math.max(0, targetIndex - 1);
+	int lowerIndex = targetIndex - 1;
 	int higherIndex = targetIndex + 1;
-	while((lowerIndex != 0 && data[lowerIndex].equals(target))) {
+	while((lowerIndex >= 0 && data[lowerIndex].equals(target))) {
 	    count++;
 	    lowerIndex--;
 	}
-	while(higherIndex != size && data[higherIndex].equals(target)) {
+	while(higherIndex < size && data[higherIndex].equals(target)) {
 	    count++;
 	    higherIndex++;
 	}
@@ -121,12 +132,21 @@ public class SortedArrayList<E> implements SortedList<E> {
 	}
 	return array;
     }
-
+    
+    /**
+     * Generates a new generic array of type <E>.
+     * @implNote this method should only be used internally, may through ClassCastException if used outside of SortedArrayList
+     * @param length - size of new array
+     * @return a new generic array
+     */
     @SuppressWarnings("unchecked")
     private E[] generateNewArray(int length) {
 	return (E[]) new Object[length];
     }
-
+    
+   /**
+    * Doubles the backing size array of this SortedArrayList object, where the new elements are by default null.
+    */
     private void doubleBackingArray() {
 	E[] tempArray = generateNewArray(data.length * 2);
 	for (int i = 0; i < size; i++) {
@@ -134,7 +154,14 @@ public class SortedArrayList<E> implements SortedList<E> {
 	}
 	data = tempArray;
     }
-
+    
+    /**
+     * Helper method that performs comparison between two objects of type E using either E's natural ordering or an outside Comparator object, 
+     * depending on which constructor was called for this SortedArrayList object.
+     * @param elt1
+     * @param elt2
+     * @return
+     */
     @SuppressWarnings("unchecked")
     private int innerCompare(E elt1, E elt2) {
 	if (cmp == null) {

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -15,12 +16,15 @@ import org.junit.jupiter.api.Test;
 class SortedArrayListTest {
     SortedList<String> emptyList;
     SortedList<Integer> intList;
+    SortedList<Integer> intListReverseOrder;
 
     @BeforeEach
     void setUp() {
 	emptyList = new SortedArrayList<>();
 	intList = new SortedArrayList<>();
+	intListReverseOrder = new SortedArrayList<>(Comparator.reverseOrder());
 	intList.insertAll(List.of(57, 0, -5, 3));
+	intListReverseOrder.insertAll(List.of(57, 0, -5, 3));
     }
     
     @Test
@@ -103,15 +107,17 @@ class SortedArrayListTest {
     @Test
     void testInsertNewMaxDuplicate() {
 	// Test with SortedList with even number of elements
-	intList.insert(57);
-	assertTrue(Arrays.deepEquals(new Integer[] {-5, 0, 3, 57, 57},
+	intList.insert(58);
+	assertTrue(Arrays.deepEquals(new Integer[] {-5, 0, 3, 57, 58},
 		intList.toArray()));
 	
 	// Test with SortedList with odd number of elements
-	intList.insert(57);
-	assertTrue(Arrays.deepEquals(new Integer[] {-5, 0, 3, 57, 57, 57},
+	intList.insert(58);
+	assertTrue(Arrays.deepEquals(new Integer[] {-5, 0, 3, 57, 58, 58},
 		intList.toArray()));
     }
+    
+    
     
     @Test
     void testInsertAllDuplicates() {
@@ -178,6 +184,12 @@ class SortedArrayListTest {
 	intList.clear();
 	assertEquals(0, intList.countEntries(57));
     }
+    
+    @Test
+    void testEmptyCountEntries() {
+	assertEquals(0, emptyList.countEntries("Balls"));
+    }
+    
 
     @Test
     void testIsEmptyWhenIsEmpty() {
@@ -198,6 +210,13 @@ class SortedArrayListTest {
 	assertEquals(999, intList.max());
     }
     
+    @Test
+    void maxIsMaxReverseOrder() {
+	assertEquals(-5, intListReverseOrder.max());
+	intListReverseOrder.insert(-56);
+	assertEquals(-56, intListReverseOrder.max());
+    }
+    
     void emptyArrayMax() {
 	assertThrows(NoSuchElementException.class, () -> emptyList.max());
     }
@@ -211,6 +230,17 @@ class SortedArrayListTest {
 	assertEquals(57, intList.median());
 	intList.insert(-63);
 	assertEquals(3, intList.median());
+    }
+    
+    @Test
+    void medianIsMedianReverseOrder() {
+	assertEquals(0, intListReverseOrder.median());
+	intListReverseOrder.insert(999);
+	assertEquals(3, intListReverseOrder.median());
+	intListReverseOrder.insert(999);
+	assertEquals(3, intListReverseOrder.median());
+	intListReverseOrder.insert(-63);
+	assertEquals(3, intListReverseOrder.median());
     }
     
     void emptyArrayMedian() {
@@ -243,8 +273,17 @@ class SortedArrayListTest {
     }
     
     @Test
-    void toArrayEmpty() {
+    void toArrayKeepsCopiesNotRefs() {
+	Object[] sortedArray = intList.toArray();
+	assertTrue(Arrays.deepEquals(new Integer[] {-5, 0, 3, 57},
+		sortedArray));
 	
+	sortedArray[0] = 4;
+	assertTrue(Arrays.deepEquals(new Integer[] {-5, 0, 3, 57},
+		intList.toArray()));
+	intList.clear();
+	intList.insertAll(List.of(-5, 0, 3, 90));
+	assertTrue(Arrays.deepEquals(new Integer[] {4, 0, 3, 57},
+		sortedArray));
     }
-   
 }
