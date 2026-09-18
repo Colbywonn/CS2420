@@ -12,60 +12,60 @@ import org.junit.jupiter.api.Test;
 public class IntegerStringUtilityTest {
 
     Integer[] emptyIntArray;
+
     @BeforeEach
     void setUp() {
 	emptyIntArray = new Integer[0];
     }
-    
+
     @Test
     void testInsertionSortEmptyArray() {
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(new Integer[] {}, Comparator.naturalOrder()));
 	assertTrue(Arrays.deepEquals(emptyIntArray, new Integer[] {}));
     }
-    
+
     @Test
     void testInsertionSortCharArray() {
-	Character[] digits = {'8', '6', '1', '0', '4'};
+	Character[] digits = { '8', '6', '1', '0', '4' };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(digits, Comparator.naturalOrder()));
-	assertTrue(Arrays.deepEquals(emptyIntArray, new Character[] {'0', '1', '4', '6', '8'}));
+	assertTrue(Arrays.deepEquals(emptyIntArray, new Character[] { '0', '1', '4', '6', '8' }));
     }
-    
+
     @Test
     void testInsertionSortIntegerArray() {
-	Integer[] ints = {348, 126, 581, -50, 0};
+	Integer[] ints = { 348, 126, 581, -50, 0 };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(ints, Comparator.naturalOrder()));
-	assertTrue(Arrays.deepEquals(emptyIntArray, new Integer[] {-50, 0, 126, 348, 581}));
+	assertTrue(Arrays.deepEquals(emptyIntArray, new Integer[] { -50, 0, 126, 348, 581 }));
     }
-    
+
     @Test
     void testInsertionSortStringArray() {
-	String[] strings = new String[] {"Hello", "farewell", "Bonjour", "Goodbye", "5", "%"};
+	String[] strings = new String[] { "Hello", "farewell", "Bonjour", "Goodbye", "5", "%" };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(strings, Comparator.naturalOrder()));
-	assertTrue(Arrays.deepEquals(emptyIntArray, new String[] {"%", "5", "Bonjour", "Goodbye", "Hello", "farewell" }));
+	assertTrue(
+		Arrays.deepEquals(emptyIntArray, new String[] { "%", "5", "Bonjour", "Goodbye", "Hello", "farewell" }));
     }
-    
+
     @Test
     void testInsertionSortCharArrayReverseOrder() {
-	Character[] digits = {'8', '6', '1', '0', '4'};
+	Character[] digits = { '8', '6', '1', '0', '4' };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(digits, Comparator.reverseOrder()));
-	assertTrue(Arrays.deepEquals(emptyIntArray, new Character[] {'8', '6', '4', '1', '0'}));
+	assertTrue(Arrays.deepEquals(emptyIntArray, new Character[] { '8', '6', '4', '1', '0' }));
     }
-    
+
     @Test
     void testInsertionSortIntegerArrayReverseOrder() {
-	Integer[] ints = {348, 126, 581, -50, 0};
+	Integer[] ints = { 348, 126, 581, -50, 0 };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(ints, Comparator.reverseOrder()));
-	assertTrue(Arrays.deepEquals(emptyIntArray, new Integer[] {348, 126, 581, 0, -50}));
+	assertTrue(Arrays.deepEquals(emptyIntArray, new Integer[] { 348, 126, 581, 0, -50 }));
     }
-    
+
     @Test
     void testInsertionSortStringArrayReversOrder() {
-	String[] strings = new String[] {"Hello", "farewell", "Bonjour", "Goodbye", "5", "%"};
+	String[] strings = new String[] { "Hello", "farewell", "Bonjour", "Goodbye", "5", "%" };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(strings, Comparator.naturalOrder()));
-	assertTrue(Arrays.deepEquals(emptyIntArray, new String[] {"farewell", "Hello", "Goodbye", "Bonjour", "5", "%" }));
+	assertTrue(
+		Arrays.deepEquals(emptyIntArray, new String[] { "farewell", "Hello", "Goodbye", "Bonjour", "5", "%" }));
     }
-    
-    
-    
-    
+
 }

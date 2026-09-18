@@ -7,6 +7,9 @@ import java.util.Comparator;
  * @date el dia de hoy
  */
 public class IntegerStringUtility<E> {
+    private static StringNumericalValueComparator valueComparator = new StringNumericalValueComparator();
+    
+    
     /**
      * Sorts the input array using an insertion sort based on the Comparator that is
      * passed in.
@@ -45,7 +48,13 @@ public class IntegerStringUtility<E> {
 	 */
 	@Override
 	public int compare(String o1, String o2) {
-	    
+	    while (o1.length() < o2.length()) {
+		o1 = "0" + o1;
+	    }
+	    while (o2.length() < o1.length()) {
+		o2 = "0" + o2;
+	    }
+	    return o1.compareTo(o2);
 	}
     }
 
@@ -67,8 +76,10 @@ public class IntegerStringUtility<E> {
 	 */
 	@Override
 	public int compare(String o1, String o2) {
-
-	    return 0;
+	    Character[] o1c = stringToCharacterArray(o1), o2c = stringToCharacterArray(o2);
+	    insertionSort(o1c, Comparator.naturalOrder());
+	    insertionSort(o2c, Comparator.naturalOrder());
+	    return valueComparator.compare(String.valueOf(o1c), String.valueOf(o2c));
 	}
     }
 
@@ -87,9 +98,13 @@ public class IntegerStringUtility<E> {
 	 */
 	@Override
 	public int compare(String[] o1, String[] o2) {
-
-	    return 0;
+	    int comp = ((Integer) o1.length).compareTo(o2.length);
+	    if (comp == 0) {
+		return valueComparator.compare(findMax(o1, valueComparator), findMax(o2, valueComparator));
+	    }
+	    return comp;
 	}
+
     }
 
     /**
@@ -113,5 +128,14 @@ public class IntegerStringUtility<E> {
      */
     public static String[] findMaximumSimilarityGroup(int[] array) {
 	return null;
+    }
+
+    private static Character[] stringToCharacterArray(String s) {
+	Character[] characterArray = new Character[s.length()];
+	char[] charArray = s.toCharArray();
+	for (int i = 0; i < s.length(); i++) {
+	    characterArray[i] = charArray[i];
+	}
+	return characterArray;
     }
 }
