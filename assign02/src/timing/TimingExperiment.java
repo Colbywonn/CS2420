@@ -43,7 +43,7 @@ public abstract class TimingExperiment {
 		int size = problemSizeMin;
 		for(int i = 0; i < problemSizeCount; i++) {
 			long medianElapsedTime = computeMedianElapsedTime(size);
-			System.out.println(size + "\t\t" + medianElapsedTime);
+			System.out.println(size + "\t" + medianElapsedTime);
 			size += problemSizeStep;
 		}
 	}
@@ -57,8 +57,9 @@ public abstract class TimingExperiment {
 	 */
 	protected long computeMedianElapsedTime(int problemSize) {
 		long[] elapsedTimes = new long[experimentIterationCount];
-		for(int i = 0; i < experimentIterationCount; i++) 
-			elapsedTimes[i] = computeElapsedTime(problemSize);
+		for(int i = 0; i < experimentIterationCount; i++) {
+		    elapsedTimes[i] = computeElapsedTime(problemSize);
+		}
 		Arrays.sort(elapsedTimes);
 		return elapsedTimes[experimentIterationCount / 2];
 	}
