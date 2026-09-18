@@ -45,8 +45,7 @@ public class IntegerStringUtility<E> {
 	 */
 	@Override
 	public int compare(String o1, String o2) {
-
-	    return 0;
+	    
 	}
     }
 

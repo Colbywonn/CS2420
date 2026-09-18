@@ -62,8 +62,6 @@ public class SortedArrayList<E> implements SortedList<E> {
 	    return count;
 	}
 	count++;
-	// Changing the lower and higher indices lets us check the values next 
-	// to the target lets us know if there are other equal entries.
 	int lowerIndex = targetIndex - 1;
 	int higherIndex = targetIndex + 1;
 	while((lowerIndex >= 0 && data[lowerIndex].equals(target))) {
@@ -160,9 +158,9 @@ public class SortedArrayList<E> implements SortedList<E> {
     /**
      * Helper method that performs comparison between two objects of type E using either E's natural ordering or an outside Comparator object, 
      * depending on which constructor was called for this SortedArrayList object.
-     * @param elt1 - The item to be compared
-     * @param elt2 - The item to be compared against
-     * @return A positive number if elt1 > elt2, zero if elt1 = elt2, and a negative number if elt1 < elt2.
+     * @param elt1
+     * @param elt2
+     * @return
      */
     @SuppressWarnings("unchecked")
     private int innerCompare(E elt1, E elt2) {
@@ -171,11 +169,7 @@ public class SortedArrayList<E> implements SortedList<E> {
 	}
 	return cmp.compare(elt1, elt2);
     }
-    /**
-     * An implementation of a binary search. Searches through an ordered array.
-     * @param element - The item to be searched for 
-     * @return The index where the item is found, or where the item should be inserted if not present.
-     */
+
     private int binarySearch(E element) {
 	int low = 0, high = size - 1, mid = 0;
 	while (low <= high) {
@@ -191,13 +185,7 @@ public class SortedArrayList<E> implements SortedList<E> {
 	}
 	return low;
     }
-    /**
-     * Helper method that facilitates insertion into a sorted list by shifting 
-     * all elements whose index is higher than the given insertion point, 
-     * and inserts said item at the given insertion point.
-     * @param element - The item to be inserted
-     * @param insertionPoint - The index where element is to be inserted 
-     */
+    
     private void shiftInsert(E element, int insertionPoint) {
    	for (int i = size; i > insertionPoint; i--) {
    	    data[i] = data[i - 1];
