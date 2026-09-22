@@ -1,5 +1,6 @@
 package assign04;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -18,7 +19,16 @@ public class IntegerStringUtility<E> {
      * @param cmp   - a Comparator to give ordering to the array
      */
     public static <E> void insertionSort(E[] array, Comparator<? super E> cmp) {
-
+	for(int i = 0; i < array.length-1; i++) {
+	    int n = i;
+	    while(n >= 0 && cmp.compare(array[n], array[n+1]) > 0) {
+		E temp = array[n+1];
+		array[n+1] = array[n];
+		array[n] =  temp;
+		n--;
+		
+	    }
+	}
     }
 
     /**
@@ -30,8 +40,9 @@ public class IntegerStringUtility<E> {
      * @return the largest element in the array
      */
     public static <E> E findMax(E[] array, Comparator<? super E> cmp) {
-	// call insertionSort. you NEED to do it.
-	return null;
+	E[] tempArray = Arrays.copyOf(array, array.length);
+	insertionSort(tempArray, cmp);
+	return tempArray[tempArray.length-1];
     }
 
     /**
@@ -116,7 +127,7 @@ public class IntegerStringUtility<E> {
      * @return a 2d array representing the similarities.
      */
     public static String[][] getSimilarityGroups(String[] array) {
-	return null;
+	
 
     }
 
@@ -130,6 +141,7 @@ public class IntegerStringUtility<E> {
 	return null;
     }
 
+    
     private static Character[] stringToCharacterArray(String s) {
 	Character[] characterArray = new Character[s.length()];
 	char[] charArray = s.toCharArray();
