@@ -26,7 +26,6 @@ public class IntegerStringUtility<E> {
 		array[n+1] = array[n];
 		array[n] =  temp;
 		n--;
-		
 	    }
 	}
     }
@@ -128,7 +127,6 @@ public class IntegerStringUtility<E> {
      */
     public static String[][] getSimilarityGroups(String[] array) {
 	
-
     }
 
     /**
