@@ -1,5 +1,6 @@
 package assign04;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,6 +13,7 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import assign04.IntegerStringUtility.StringNumericalValueComparator;
 import assign04.IntegerStringUtility.StringSimilarityComparator;
 import assign04.IntegerStringUtility.StringSimilarityGroupComparator;
 
@@ -24,13 +26,17 @@ public class IntegerStringUtilityTest {
     
     String[] largeStringArray;
     
-    StringSimilarityComparator similarityComparator = new StringSimilarityComparator();
-    StringSimilarityGroupComparator groupComparator = new StringSimilarityGroupComparator();
+    StringSimilarityComparator similarityComparator;
+    StringSimilarityGroupComparator groupComparator;
+    StringNumericalValueComparator valueComparator;
     
     Random rng;
 
     @BeforeEach
     void setUp() {
+	similarityComparator = new StringSimilarityComparator();
+	groupComparator = new StringSimilarityGroupComparator();
+	valueComparator = new StringNumericalValueComparator();
 	rng = new Random();
 	emptyIntArray = new Integer[0];
 	
@@ -69,14 +75,14 @@ public class IntegerStringUtilityTest {
     @Test
     void testInsertionSortEmptyArray() {
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(new Integer[] {}, Comparator.naturalOrder()));
-	assertTrue(Arrays.deepEquals(emptyIntArray, new Integer[] {}));
+	assertArrayEquals(emptyIntArray, new Integer[] {});
     }
 
     @Test
     void testInsertionSortCharArray() {
 	Character[] digits = { '8', '6', '1', '0', '4' };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(digits, Comparator.naturalOrder()));
-	assertTrue(Arrays.equals(digits, new Character[]{'0', '1', '4', '6', '8'}));
+	assertArrayEquals(digits, new Character[]{'0', '1', '4', '6', '8'});
     }
 
     @Test
@@ -85,7 +91,7 @@ public class IntegerStringUtilityTest {
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(largeIntSortedArray, Comparator.naturalOrder()));
 	Arrays.sort(largeIntArray);
 	
-	assertTrue(Arrays.deepEquals(largeIntArray, largeIntSortedArray));
+	assertArrayEquals(largeIntArray, largeIntSortedArray);
     }
 
     @Test
@@ -94,29 +100,28 @@ public class IntegerStringUtilityTest {
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(largeStringSortedArray, Comparator.naturalOrder()));
 	Arrays.sort(largeStringArray);
 	
-	assertTrue(Arrays.deepEquals(largeStringArray, largeStringSortedArray));
+	assertArrayEquals(largeStringArray, largeStringSortedArray);
     }
 
     @Test
     void testInsertionSortCharArrayReverseOrder() {
 	Character[] digits = { '8', '6', '1', '0', '4' };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(digits, Comparator.reverseOrder()));
-	assertTrue(Arrays.deepEquals(digits, new Character[] { '8', '6', '4', '1', '0' }));
+	assertArrayEquals(digits, new Character[] { '8', '6', '4', '1', '0' });
     }
 
     @Test
     void testInsertionSortIntegerArrayReverseOrder() {
 	Integer[] ints = { 348, 126, 581, -50, 0 };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(ints, Comparator.reverseOrder()));
-	assertTrue(Arrays.deepEquals(ints, new Integer[] { 581, 348, 126, 0, -50 }));
+	assertArrayEquals(ints, new Integer[] { 581, 348, 126, 0, -50 });
     }
 
     @Test
     void testInsertionSortStringArrayReversOrder() {
 	String[] strings = new String[] { "Hello", "farewell", "Bonjour", "Goodbye", "5", "5", "%" };
 	assertDoesNotThrow(() -> IntegerStringUtility.insertionSort(strings, Comparator.reverseOrder()));
-	assertTrue(
-		Arrays.deepEquals(strings, new String[] { "farewell", "Hello", "Goodbye", "Bonjour", "5", "5", "%" }));
+	assertArrayEquals(strings, new String[] { "farewell", "Hello", "Goodbye", "Bonjour", "5", "5", "%" });
     }
     
     //TODO findMax method
@@ -151,6 +156,20 @@ public class IntegerStringUtilityTest {
 	assertEquals("777", test);
     }    
     
+    @Test
+    void StringNumericalValueComparatorSort() {
+	String[] testStrings = new String[]{"777", "777", "555", "54a", "123124", "8675309", "-412", "121132411324315356151462646363466"};
+	IntegerStringUtility.insertionSort(testStrings, valueComparator);
+	assertArrayEquals(new String[] {"-412", "54a", "555", "777", "777", "123124", "8675309", "121132411324315356151462646363466"}, testStrings);
+    }
+    
+    @Test
+    void StringSimilarityComparatorSort() {
+	String[] testStrings = new String[]{"737", "377", "555", "123124", "8675309", "121132411324315356151462646363466"};
+	IntegerStringUtility.insertionSort(testStrings, similarityComparator);
+	assertArrayEquals(new String[] {"737", "377", "555", "123124", "8675309", "121132411324315356151462646363466"}, testStrings);
+    }
+    
     
     //TODO comparators
     
@@ -171,6 +190,6 @@ public class IntegerStringUtilityTest {
     void testMaximumSimilarityGroups() {
 	int[] numbs = {4, 4, 4, 1234, 4321, 9999, 9999, 7};
 	String[] max = IntegerStringUtility.findMaximumSimilarityGroup(numbs);
-	assertTrue(Arrays.deepEquals(max, new String[] {"4", "4", "4"}));
+	assertArrayEquals(max, new String[] {"4", "4", "4"});
     }
 }
