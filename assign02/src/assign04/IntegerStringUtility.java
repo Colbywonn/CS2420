@@ -3,6 +3,7 @@ package assign04;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Colby Miller & Todd Sorensen
@@ -11,7 +12,7 @@ import java.util.Comparator;
 public class IntegerStringUtility<E> {
     private static StringNumericalValueComparator valueComparator = new StringNumericalValueComparator();
     private static StringSimilarityComparator similarityComparator = new StringSimilarityComparator();
-    
+    private static StringSimilarityGroupComparator groupComparator = new StringSimilarityGroupComparator();
     /**
      * Sorts the input array using an insertion sort based on the Comparator that is
      * passed in.
@@ -127,34 +128,58 @@ public class IntegerStringUtility<E> {
      * @return a 2d array representing the similarities.
      */
     public static String[][] getSimilarityGroups(String[] array) {
-	ArrayList<ArrayList<String>> tempArray = new ArrayList<>();
-	for(int i = 0; i < array.length; i++) {
-	    tempArray.add(new ArrayList<String>());
-	    tempArray.get(i).add(array[i]);
-	    for(String value : array) {
-		if(similarityComparator.compare(array[i], value) == 0) {
-		    tempArray.get(i).add(value);		}
+	String[] sortedArray = Arrays.copyOf(array, array.length);
+	
+	insertionSort(sortedArray, similarityComparator);
+	
+	List<List<String>> groupsList = new ArrayList<>();
+	groupsList.add(new ArrayList<>(Arrays.asList(sortedArray[0])));
+	
+	for (int i = 1; i < sortedArray.length; i++) {
+	    if(similarityComparator.compare(sortedArray[i-1], sortedArray[i]) != 0) {
+		groupsList.add(new ArrayList<String>());
 	    }
+	    groupsList.getLast().add(sortedArray[i]);
 	}
-	tempArray.removeIf(list -> list.size() <= 1);
-	String[][] groupArray = new String[tempArray.size()][];
-	for(int i = 0; i < tempArray.size(); i++) {
-	    groupArray[i] = (String[]) tempArray.get(i).toArray();
+	
+	groupsList.removeIf(list -> list.size() <= 1);
+	
+	String[][] groupsArray = new String[groupsList.size()][];
+	for(int i = 0; i < groupsList.size(); i++) {
+	    groupsArray[i] = groupsList.get(i).toArray(new String[0]);
 	}
-	return groupArray;
+	return groupsArray;
     }
 
     /**
-     * Locates the largest similarity group in the array
+     * Locates the largest similarity group in the array.
      *
      * @param array the array to search
      * @return - the subarray of the maximum similarity
      */
     public static String[] findMaximumSimilarityGroup(int[] array) {
-
+	String[][] groupsArray = getSimilarityGroups(intToStringArray(array));
+	String[] largestGroup = groupsArray[0];
+	
+	for(String[] group : groupsArray) {
+	    if(groupComparator.compare(group, largestGroup) > 0) {
+		largestGroup = group;
+	    }
+	}
+	return largestGroup;
+    }
+    
+    
+    
+    private static  String[] intToStringArray(int[] array) {
+	String[] stringArray = new String[array.length];
+	
+	for (int i = 0; i < stringArray.length; i++) {
+	    stringArray[i] = String.valueOf(array[i]);
+	}
+	return stringArray;
     }
 
-    
     private static Character[] stringToCharacterArray(String s) {
 	Character[] characterArray = new Character[s.length()];
 	char[] charArray = s.toCharArray();
