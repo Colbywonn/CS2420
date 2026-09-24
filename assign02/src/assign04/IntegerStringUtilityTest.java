@@ -1,6 +1,8 @@
 package assign04;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -10,6 +12,10 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import assign04.IntegerStringUtility.StringSimilarityComparator;
+import assign04.IntegerStringUtility.StringSimilarityGroupComparator;
+
+
 public class IntegerStringUtilityTest {
 
     Integer[] emptyIntArray;
@@ -17,6 +23,9 @@ public class IntegerStringUtilityTest {
     Integer[] largeIntArray;
     
     String[] largeStringArray;
+    
+    StringSimilarityComparator similarityComparator = new StringSimilarityComparator();
+    StringSimilarityGroupComparator groupComparator = new StringSimilarityGroupComparator();
     
     Random rng;
 
@@ -111,7 +120,41 @@ public class IntegerStringUtilityTest {
     }
     
     //TODO findMax method
+    
+    @Test
+    void findMaxNullTest() {
+	assertThrows(ArrayIndexOutOfBoundsException.class,() ->IntegerStringUtility.findMax(emptyIntArray, Comparator.naturalOrder()));
+    }
+    
+    @Test
+    void findMaxTest() {
+	String testMax = IntegerStringUtility.findMax(largeStringArray, Comparator.naturalOrder());
+	String max = "";
+	for(String s : largeStringArray) {
+	    if(s.compareTo(max) > 0) {
+		max = s;
+	    }
+	}
+	assertEquals(max, testMax);
+    }
+    
+    @Test
+    void findMaxDifferentComparatorTest() {
+	String[] testMax = new String[]{"777", "777", "555", "123124", "8675309", "-412", "121132411324315356151462646363466"};
+	assertEquals("121132411324315356151462646363466", IntegerStringUtility.findMax(testMax, similarityComparator));
+    }
+    
+    @Test
+    void findMaxWhenInputIsNonNumeric() {
+	String[] testMax = new String[]{"777", "7$7", "12", "644"};
+	String test = IntegerStringUtility.findMax(testMax, Comparator.naturalOrder());
+	assertEquals("777", test);
+    }    
+    
+    
     //TODO comparators
+    
+    
     //TODO more similarity groups ones
     
     @Test
