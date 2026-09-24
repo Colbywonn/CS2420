@@ -174,15 +174,7 @@ public class IntegerStringUtility<E> {
 	if (array.length == 0) {
 	    return new String[] {};
 	}
-	String[][] groupsArray = getSimilarityGroups(intToStringArray(array));
-	String[] largestGroup = groupsArray[0];
-
-	for (String[] group : groupsArray) {
-	    if (groupComparator.compare(group, largestGroup) > 0) {
-		largestGroup = group;
-	    }
-	}
-	return largestGroup;
+	return findMax(getSimilarityGroups(intToStringArray(array)), groupComparator);
     }
 
     /**
