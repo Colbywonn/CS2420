@@ -44,11 +44,11 @@ public class IntegerStringUtility<E> {
     public static <E> E findMax(E[] array, Comparator<? super E> cmp) {
 	E[] tempArray = Arrays.copyOf(array, array.length);
 	insertionSort(tempArray, cmp);
-	return tempArray[tempArray.length-1];
+	return tempArray[tempArray.length-1]; 
     }
 
     /**
-     * An implementation of the Comparator interface for strings with numerical
+     * An implementation of the Comparator interface  for strings with numerical
      * values.
      */
     public static class StringNumericalValueComparator implements Comparator<String> {
