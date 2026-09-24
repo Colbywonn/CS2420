@@ -9,9 +9,9 @@ import java.util.List;
  * Utility class that compares positive integer values represented as strings
  * and groups them by similarity. Similarity is defined by the internal
  * StringSimilarityComparator class's Comparator implementation.
- * 
+ *
  * @author Colby Miller & Todd Sorensen
- * @date 9/23/2026
+ * @date 9/24/2026
  */
 public class IntegerStringUtility<E> {
     private static StringNumericalValueComparator valueComparator = new StringNumericalValueComparator();
@@ -54,9 +54,9 @@ public class IntegerStringUtility<E> {
     /**
      * Comparator implementation that defines the comparison of positive integer
      * values represented as strings, numerically.
-     * 
+     *
      * NOTE: The behavior of this comparator is undefined if one or both of the
-     *           strings being compared do not represent a positive integer value.
+     * strings being compared do not represent a positive integer value.
      */
     public static class StringNumericalValueComparator implements Comparator<String> {
 	/**
@@ -120,7 +120,7 @@ public class IntegerStringUtility<E> {
 	 */
 	@Override
 	public int compare(String[] o1, String[] o2) {
-	    if(o1.length == 0 && o2.length == 0) {
+	    if (o1.length == 0 && o2.length == 0) {
 		return 0;
 	    }
 	    int comp = ((Integer) o1.length).compareTo(o2.length);
@@ -135,12 +135,16 @@ public class IntegerStringUtility<E> {
     /**
      * Returns the similarity groups in the input array. Each row in the
      * two-dimensional array returned is a single similarity group, and each string
-     * in a row is similar to every other string in the same row.
+     * in a row is similar to every other string in the same row. If the length of
+     * array is zero, returns an empty String array.
      *
      * @param array - the array of strings to extract similarity groups from
      * @return a 2d array containing the similarity groups of the given array
      */
     public static String[][] getSimilarityGroups(String[] array) {
+	if (array.length == 0) {
+	    return new String[][] {};
+	}
 	String[] sortedArray = Arrays.copyOf(array, array.length);
 
 	insertionSort(sortedArray, similarityComparator);
@@ -160,12 +164,16 @@ public class IntegerStringUtility<E> {
     }
 
     /**
-     * Locates the largest similarity group in the array.
+     * Locates the largest similarity group in the array. If the length of array is
+     * zero, returns an empty String array.
      *
      * @param array - the array to search through
      * @return the largest similarity group
      */
     public static String[] findMaximumSimilarityGroup(int[] array) {
+	if (array.length == 0) {
+	    return new String[] {};
+	}
 	String[][] groupsArray = getSimilarityGroups(intToStringArray(array));
 	String[] largestGroup = groupsArray[0];
 
@@ -181,7 +189,7 @@ public class IntegerStringUtility<E> {
      * Helper method that converts a primitive integer array into a String array
      * where each value is converted into a string. IE: the input [1, 2, 3, 4] will
      * give the output ["1", "2", "3", "4"].
-     * 
+     *
      * @param array - the values to be converted into strings
      * @return the String array
      */
@@ -197,7 +205,7 @@ public class IntegerStringUtility<E> {
     /**
      * Helper method which converts a string into an array of Character
      * wrapper-class objects.
-     * 
+     *
      * @param s - the string to be converted
      * @return Character array containing each character in the given string
      */
@@ -213,7 +221,7 @@ public class IntegerStringUtility<E> {
     /**
      * Helper method that converts an array of Character wrapper-class objects into
      * a single String object.
-     * 
+     *
      * @param array - the Characters to be appended to a String
      * @return the finished String
      */
@@ -227,7 +235,7 @@ public class IntegerStringUtility<E> {
 
     /**
      * Helper method that converts a 2d List of type String to a 2d String array.
-     * 
+     *
      * @param groupsList - the 2d List to be converted into a 2d String array
      * @return the 2d String array version of the input 2d List
      */
