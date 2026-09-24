@@ -52,12 +52,10 @@ public class IntegerStringUtility<E> {
     }
 
     /**
-     * An implementation of the Comparator interface  for strings with numerical
-     * values.
      * Comparator implementation that defines the comparison of positive integer
      * values represented as strings, numerically.
      * 
-     * @implNote The behavior of this comparator is undefined if one or both of the
+     * NOTE: The behavior of this comparator is undefined if one or both of the
      *           strings being compared do not represent a positive integer value.
      */
     public static class StringNumericalValueComparator implements Comparator<String> {
@@ -122,6 +120,9 @@ public class IntegerStringUtility<E> {
 	 */
 	@Override
 	public int compare(String[] o1, String[] o2) {
+	    if(o1.length == 0 && o2.length == 0) {
+		return 0;
+	    }
 	    int comp = ((Integer) o1.length).compareTo(o2.length);
 	    if (comp == 0) {
 		return valueComparator.compare(findMax(o1, valueComparator), findMax(o2, valueComparator));
