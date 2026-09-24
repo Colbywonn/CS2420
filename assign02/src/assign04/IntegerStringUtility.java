@@ -13,6 +13,7 @@ public class IntegerStringUtility<E> {
     private static StringNumericalValueComparator valueComparator = new StringNumericalValueComparator();
     private static StringSimilarityComparator similarityComparator = new StringSimilarityComparator();
     private static StringSimilarityGroupComparator groupComparator = new StringSimilarityGroupComparator();
+    
     /**
      * Sorts the input array using an insertion sort based on the Comparator that is
      * passed in.
@@ -143,13 +144,10 @@ public class IntegerStringUtility<E> {
 	}
 	
 	groupsList.removeIf(list -> list.size() <= 1);
-	
-	String[][] groupsArray = new String[groupsList.size()][];
-	for(int i = 0; i < groupsList.size(); i++) {
-	    groupsArray[i] = groupsList.get(i).toArray(new String[0]);
-	}
-	return groupsArray;
+	return listToArray(groupsList);
     }
+
+    
 
     /**
      * Locates the largest similarity group in the array.
@@ -170,7 +168,12 @@ public class IntegerStringUtility<E> {
     }
     
     
-    
+    /**
+     * Helper method which converts an input integer array into an array of strings of the same value.
+     * IE: the input [1, 2, 3, 4] will give the output ["1", "2", "3", "4"].
+     * @param array the values to be converted into arrays
+     * @return the array of Strings
+     */
     private static  String[] intToStringArray(int[] array) {
 	String[] stringArray = new String[array.length];
 	
@@ -180,6 +183,11 @@ public class IntegerStringUtility<E> {
 	return stringArray;
     }
 
+    /**
+     * Helper method which converts a string into an array of Character wrapper-class objects.
+     * @param s - the String to be converted
+     * @return Character array containing each character in s
+     */
     private static Character[] stringToCharacterArray(String s) {
 	Character[] characterArray = new Character[s.length()];
 	char[] charArray = s.toCharArray();
@@ -189,11 +197,28 @@ public class IntegerStringUtility<E> {
 	return characterArray;
     }
     
+    /**
+     * Helper method that converts an array of Character wrapper-class objects into a single String.
+     * @param array - the Characters to be appended to a String
+     * @return the finished String
+     */
     private static String characterToString(Character[] array) {
 	StringBuilder builder = new StringBuilder();
 	for(Character character : array) {
 	    builder.append(character);
 	}
 	return builder.toString();
+    }
+    /**
+     * A Helper method that converts a 2d List object to a 2d array of type String.
+     * @param groupsList the List object to be converted to a string
+     * @return the String version of the input List 
+     */
+    private static String[][] listToArray(List<List<String>> groupsList) {
+	String[][] groupsArray = new String[groupsList.size()][];
+	for(int i = 0; i < groupsList.size(); i++) {
+	    groupsArray[i] = groupsList.get(i).toArray(new String[0]);
+	}
+	return groupsArray;
     }
 }

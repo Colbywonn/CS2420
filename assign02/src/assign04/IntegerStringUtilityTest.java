@@ -110,11 +110,24 @@ public class IntegerStringUtilityTest {
 		Arrays.deepEquals(strings, new String[] { "farewell", "Hello", "Goodbye", "Bonjour", "5", "5", "%" }));
     }
     
+    //TODO findMax method
+    //TODO comparators
+    //TODO more similarity groups ones
+    
     @Test
-    void testGetGroupArray() {
+    void testSimilarityGroupArray() {
 	String[] numbs = {"7", "8", "1234", "4321", "7", "4231", "12113243253454363246", "12113243253454363246", "12113243253454363246"};
 	String[][] groupsUnderTesting = IntegerStringUtility.getSimilarityGroups(numbs);
 	String[][] test = new String[][] {{"7","7"},{"1234", "4321", "4231"},{"12113243253454363246", "12113243253454363246", "12113243253454363246"}};
 	assertTrue(Arrays.deepEquals(groupsUnderTesting, test));
+    }
+    
+    //TODO more max similarity groups ones
+    
+    @Test
+    void testMaximumSimilarityGroups() {
+	int[] numbs = {4, 4, 4, 1234, 4321, 9999, 9999, 7};
+	String[] max = IntegerStringUtility.findMaximumSimilarityGroup(numbs);
+	assertTrue(Arrays.deepEquals(max, new String[] {"4", "4", "4"}));
     }
 }
