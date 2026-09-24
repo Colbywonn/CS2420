@@ -1,5 +1,6 @@
 package assign04;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -9,7 +10,7 @@ import java.util.Comparator;
  */
 public class IntegerStringUtility<E> {
     private static StringNumericalValueComparator valueComparator = new StringNumericalValueComparator();
-    
+    private static StringSimilarityComparator similarityComparator = new StringSimilarityComparator();
     
     /**
      * Sorts the input array using an insertion sort based on the Comparator that is
@@ -81,15 +82,15 @@ public class IntegerStringUtility<E> {
 	 *
 	 * @param o1 - the number in a String to compare
 	 * @param o2 - the number in a String to compare to
-	 * @return positive if o1 and 02 are similar, 0 if o1 = o1, negative if o1 is
-	 *         not similar to o2.
+	 * @return positive if o1 is larger than o2, 0 if o1 is similar to  o2, negative if o1 is
+	 *         smaller than o2.
 	 */
 	@Override
 	public int compare(String o1, String o2) {
 	    Character[] o1c = stringToCharacterArray(o1), o2c = stringToCharacterArray(o2);
 	    insertionSort(o1c, Comparator.naturalOrder());
 	    insertionSort(o2c, Comparator.naturalOrder());
-	    return valueComparator.compare(String.valueOf(o1c), String.valueOf(o2c));
+	    return valueComparator.compare(characterToString(o1c), characterToString(o2c));
 	}
     }
 
@@ -126,7 +127,21 @@ public class IntegerStringUtility<E> {
      * @return a 2d array representing the similarities.
      */
     public static String[][] getSimilarityGroups(String[] array) {
-	
+	ArrayList<ArrayList<String>> tempArray = new ArrayList<>();
+	for(int i = 0; i < array.length; i++) {
+	    tempArray.add(new ArrayList<String>());
+	    tempArray.get(i).add(array[i]);
+	    for(String value : array) {
+		if(similarityComparator.compare(array[i], value) == 0) {
+		    tempArray.get(i).add(value);		}
+	    }
+	}
+	tempArray.removeIf(list -> list.size() <= 1);
+	String[][] groupArray = new String[tempArray.size()][];
+	for(int i = 0; i < tempArray.size(); i++) {
+	    groupArray[i] = (String[]) tempArray.get(i).toArray();
+	}
+	return groupArray;
     }
 
     /**
@@ -136,7 +151,7 @@ public class IntegerStringUtility<E> {
      * @return - the subarray of the maximum similarity
      */
     public static String[] findMaximumSimilarityGroup(int[] array) {
-	return null;
+
     }
 
     
@@ -147,5 +162,13 @@ public class IntegerStringUtility<E> {
 	    characterArray[i] = charArray[i];
 	}
 	return characterArray;
+    }
+    
+    private static String characterToString(Character[] array) {
+	StringBuilder builder = new StringBuilder();
+	for(Character character : array) {
+	    builder.append(character);
+	}
+	return builder.toString();
     }
 }

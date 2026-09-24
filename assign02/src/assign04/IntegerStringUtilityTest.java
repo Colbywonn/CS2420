@@ -109,4 +109,12 @@ public class IntegerStringUtilityTest {
 	assertTrue(
 		Arrays.deepEquals(strings, new String[] { "farewell", "Hello", "Goodbye", "Bonjour", "5", "5", "%" }));
     }
+    
+    @Test
+    void testGetGroupArray() {
+	String[] numbs = {"7", "8", "1234", "4321", "7", "4231", "12113243253454363246", "12113243253454363246", "12113243253454363246"};
+	String[][] groupsUnderTesting = IntegerStringUtility.getSimilarityGroups(numbs);
+	String[][] test = new String[][] {{"7","7"},{"1234", "4321", "4231"},{"12113243253454363246", "12113243253454363246", "12113243253454363246"}};
+	assertTrue(Arrays.deepEquals(groupsUnderTesting, test));
+    }
 }
