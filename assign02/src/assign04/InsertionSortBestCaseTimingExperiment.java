@@ -8,10 +8,10 @@ import timing.TimingExperiment;
 public class InsertionSortBestCaseTimingExperiment extends TimingExperiment {
 
     private static String problemSizeDescription = "arrayLength";
-    private static int problemSizeMin = 10000;
+    private static int problemSizeMin = 100000;
     private static int problemSizeCount = 10;
-    private static int problemSizeStep = 10000;
-    private static int experimentIterationCount = 10000;
+    private static int problemSizeStep = 100000;
+    private static int experimentIterationCount = 100;
 
     protected Integer[] array;
     
